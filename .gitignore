@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data_store/uploads/*
+data_store/reports/*
+artifacts/*
+!data_store/uploads/.gitkeep
+!data_store/reports/.gitkeep
