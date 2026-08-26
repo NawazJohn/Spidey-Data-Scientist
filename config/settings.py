@@ -6,3 +6,5 @@ REPORT_DIR = BASE_DIR / "data_store" / "reports"
 
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+sat = next 
