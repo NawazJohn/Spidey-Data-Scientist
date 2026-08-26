@@ -169,7 +169,7 @@ AutoDS/
 
 ```bash
 # Clone Repository
-git clone https://github.com/NawazJohn/Spidey-Data-Scientist.git
+git clone https://github.com/NawazJohn/Spidy-Data-Scientist.git
 cd AutoDS
 
 # Create & Activate Virtual Environment

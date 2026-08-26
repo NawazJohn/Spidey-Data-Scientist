@@ -1,6 +1,6 @@
 """
 Spidy DATA SCIENTIST — Autonomous Data Science (AutoDS) Single File Edition
-Run with: streamlit run autods_app.py
+Run with: streamlit run spidy_app.py
 """
 
 import json
