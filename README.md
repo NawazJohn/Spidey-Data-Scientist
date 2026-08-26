@@ -1,8 +1,8 @@
-# 🕷️ Spidey DATA SCIENTIST — Autonomous Data Scientist (AutoDS)
+# 🕷️ Spidy DATA SCIENTIST — Autonomous Data Scientist (AutoDS)
 
 > **Agentic Autonomous ML Pipeline, Exploratory Data Analysis & Intelligent AutoML Platform**
 
-Spidey DATA SCIENTIST (AutoDS) is an end-to-end, LLM-powered autonomous data science platform built with **Python**, **Streamlit**, **scikit-learn**, **Plotly**, and **Groq (Qwen 3.8)**. Given any unseen tabular CSV or Excel dataset, AutoDS autonomously validates data health, profiles statistical distributions, recommends and applies data transformations, detects task type (Classification vs. Regression), trains candidate machine learning pipelines, ranks models on a benchmark leaderboard, and writes plain-English AI dataset intelligence reports.
+Spidy DATA SCIENTIST (AutoDS) is an end-to-end, LLM-powered autonomous data science platform built with **Python**, **Streamlit**, **scikit-learn**, **Plotly**, and **Groq (Qwen 3.8)**. Given any unseen tabular CSV or Excel dataset, AutoDS autonomously validates data health, profiles statistical distributions, recommends and applies data transformations, detects task type (Classification vs. Regression), trains candidate machine learning pipelines, ranks models on a benchmark leaderboard, and writes plain-English AI dataset intelligence reports.
 
 ---
 
@@ -183,5 +183,5 @@ This generates `dummy_dataset.csv` containing missing values, dummy sentinels (`
 ---
 
 <p center>
-🚀 <b>Spidey DATA SCIENTIST (AutoDS)</b> · Powered by Groq AI & Streamlit
+🚀 <b>Spidy DATA SCIENTIST (AutoDS)</b> · Powered by Groq AI & Streamlit
 </p>

@@ -1,4 +1,4 @@
-# 🏗️ Spidey DATA SCIENTIST (AutoDS) — Architecture & System Design
+# 🏗️ Spidy DATA SCIENTIST (AutoDS) — Architecture & System Design
 
 > **Detailed Architecture Specification, Component Breakdown, and Agent Control Flow**
 

@@ -1,5 +1,5 @@
 """
-Spidey DATA SCIENTIST — Autonomous Data Science (AutoDS) Single File Edition
+Spidy DATA SCIENTIST — Autonomous Data Science (AutoDS) Single File Edition
 Run with: streamlit run autods_app.py
 """
 
@@ -546,7 +546,7 @@ class AutoDSAgent:
 # STREAMLIT UI DASHBOARD
 # ==============================================================================
 st.set_page_config(
-    page_title="Spidey DATA SCIENTIST — Autonomous Data Scientist",
+    page_title="Spidy DATA SCIENTIST — Autonomous Data Scientist",
     page_icon="🕷️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -875,8 +875,8 @@ def render_issue(issue):
 
 
 # Header & Launchpad Hero
-st.markdown('<div class="launchpad-badge"><span class="pulse-dot-green"></span> SPIDEY DATA SCIENTIST v2.0 · MISSION CONTROL</div>', unsafe_allow_html=True)
-st.markdown('<h1 class="main-header">🕷️ Spidey DATA SCIENTIST</h1>', unsafe_allow_html=True)
+st.markdown('<div class="launchpad-badge"><span class="pulse-dot-green"></span> SPIDY DATA SCIENTIST v2.0 · MISSION CONTROL</div>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">🕷️ Spidy DATA SCIENTIST</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Glossy Emerald Intelligence Hub — Profile, Clean & Train AutoML Models</p>', unsafe_allow_html=True)
 
 
