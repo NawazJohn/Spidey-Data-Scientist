@@ -1,184 +1,97 @@
-# 🏗️ Spidey DATA SCIENTIST (AutoDS) — Architecture & System Design
+# DataSage — Agent Architecture
 
-> **Detailed Architecture Specification, Component Breakdown, and Agent Control Flow**
+### Track A: Autonomous ML Pipeline & Auto-EDA Agent
+
+This document is the architecture-diagram deliverable: system components, the agent's tool set, and the **GOAL → PLAN → USE TOOLS → EXECUTE → OBSERVE → REFLECT → CORRECT → COMPLETE** loop the agent actually runs. All diagrams are Mermaid and render directly on GitHub.
 
 ---
 
-## 1. High-Level System Architecture
+## 1. System overview
 
-AutoDS is designed as a **decoupled 4-tier autonomous architecture**:
-1. **User Interface (Streamlit Mission Control Launchpad)**
-2. **LLM Orchestration Layer (AutoDSAgent via Groq API Qwen 3.8)**
-3. **Analytical Tools & Preprocessing Engines (Validation, Profiling, Filtering)**
-4. **AutoML Training Engine (scikit-learn Pipeline Evaluation)**
+```mermaid
+flowchart LR
+    User["User"] -->|upload CSV| Frontend["Frontend\n(frontend/index.html)"]
+    Frontend -->|REST API\n/api/results, /api/trace| Backend["FastAPI Backend\n(app/main.py)"]
+    Backend -->|run_pipeline_task| Orchestrator["Agent Orchestrator\n(app/agent/orchestrator.py)"]
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      Streamlit Web Interface                            │
-│                 (Glossy Emerald Theme + Plotly Charts)                  │
-└────────────────────────────────────┬────────────────────────────────────┘
-                                     │
-               ┌─────────────────────┴─────────────────────┐
-               ▼                                           ▼
-┌─────────────────────────────┐             ┌─────────────────────────────┐
-│  Statistical Tools Engine   │             │   LLM Orchestration Agent   │
-│  - Data Validator           │             │   - AutoDSAgent             │
-│  - Dataset Profiler         │             │   - Groq Qwen 3.8 LLM Model  │
-│  - Data Filter / Cleaner    │             │   - AI Insight Report Generator│
-│  - Model Trainer (AutoML)   │             │   - Cleaning Strategy Recommender│
-└──────────────┬──────────────┘             └──────────────┬──────────────┘
-               │                                           │
-               └─────────────────────┬─────────────────────┘
-                                     ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      Data Store & Model Memory                          │
-│        (Uploads, Cleaned CSVs, Execution Logs, Benchmark Metrics)       │
-└─────────────────────────────────────────────────────────────────────────┘
+    Orchestrator -->|LLM call (auto at runtime / fallback on fail)| LLMAgent["LLM Agent Loop\n(app/agent/llm_agent.py)"]
+    Orchestrator -.->|no key / offline demo mode| FallbackAgent["Deterministic Fallback\n(app/agent/fallback_agent.py)"]
+
+    LLMAgent -->|function-calling\nOpenAI-compatible| LLMProvider[("Ollama (local) / Groq /\nGemini / OpenAI\nwhichever is configured")]
+
+    LLMAgent -->|calls tools| ToolLayer["Tool Layer\n(app/agent/tools.py)"]
+    FallbackAgent -->|calls fixed order| ToolLayer
+
+    ToolLayer -->|executes modules| PipelineModules["Pipeline Engine Modules\n(profiler, cleaner, trainer,\nevaluator, explainer)"]
+
+    ToolLayer -->|saves results| Storage[("Storage (storage/)\nresults.json, metrics, plots,\npreprocessed CSV")]
+
+    Backend -.->|reads| Storage
+    Backend -.->|streams| TraceUI["Agent Trace UI\nevery\nGOAL / PLAN / ACT / OBS / REFLECT / CORRECT\nstep"]
+    TraceUI -.-> Frontend
 ```
 
 ---
 
-## 2. End-to-End Pipeline Execution Flow
+## 2. The agent loop (what actually runs per request)
 
-```
-[Raw File Upload (.csv / .xlsx)]
-             │
-             ▼
-[Module 01: Data Health Validation]
-   ├── File Emptiness & Column Count Audit
-   ├── Sentinel Dummy Check ('?', '-999', 'null', 'n/a')
-   ├── Full & Subset Duplicate Calculation
-   └── Quality Score (0–100) Calculation
-             │
-             ▼
-[Module 02: Exploratory Profiling & AI Analysis]
-   ├── Column Type Inference & Summary Statistics (Mean, Std, Skewness, IQR Outliers)
-   ├── Interactive Plotly Visualizations (Histograms, Box Plots, Correlation Heatmaps)
-   └── Groq LLM API Call: Executive AI Dataset Intelligence Synthesis
-             │
-             ▼
-[Module 03: Data Filtering & Transformation]
-   ├── Preprocessing Options (Drop duplicates, constant/ID cols, null rows/cols, IQR outliers)
-   ├── Imputation Engine (Median for numeric, Mode for categorical)
-   ├── Transformation Changelog Generator
-   └── Export Cleaned Dataset CSV
-             │
-             ▼
-[Module 04: AutoML Baseline Engine]
-   ├── Target Variable Validation & High-Cardinality Safeguards
-   ├── Task Type Auto-Detection (Classification vs. Regression)
-   ├── Dynamic Target Charts (Bar, Pie, Histogram, Box Plot, Line Trend)
-   ├── ColumnTransformer Pipeline Construction (SimpleImputer + StandardScaler + OneHotEncoder)
-   ├── Multi-Model Candidate Training (Random Forest, Decision Tree, Logistic/Linear Regression)
-   └── Model Benchmark Leaderboard & Best Model Selection (F1 / R² Metric)
+```mermaid
+flowchart TD
+    GOAL["GOAL\nGiven an unseen CSV: profile, clean, detect problem type,\nselect/rank features, train & compare models vs. a baseline,\nself-correct if weak, explain the best model, summarize"] --> PLAN
+
+    PLAN["PLAN\nLLM decides the next tool call given the system prompt's\nrecommended order + everything observed so far"] --> ACT
+
+    ACT["USE TOOLS / EXECUTE\nOne function-call per turn, chosen from the 10-tool\nregistry (see section 3)"] --> OBS
+
+    OBS["OBSERVE\nTool returns a structured, natural-language result\n(or an ERROR:... string on failure) fed back to the model"] --> REFLECT
+
+    REFLECT{"REFLECT\nIs the result good?\n(clearly beats baseline? no error?\nimbalance flagged?)"}
+
+    REFLECT -->|weak / imbalanced / error, budget left| CORRECT
+    REFLECT -->|good, or no fix applies| NEXT{"More steps\nneeded?"}
+
+    CORRECT["CORRECT\nhandle_class_imbalance_and_retrain\nand/or\nengineer_features_and_retrain\n(max 2 corrective actions per run)"] --> ACT
+
+    NEXT -->|yes| PLAN
+    NEXT -->|no| COMPLETE["COMPLETE\nfinish(reasoning, summary, success)"]
 ```
 
 ---
 
-## 3. Detailed Component Breakdown
+## 3. Tool registry (`app/agent/tools.py`)
 
-### 🛠️ 1. Data Validator (`tools/data_validator.py`)
-- **Input**: `df: pd.DataFrame`, `filename: str`
-- **Output**: JSON validation dictionary containing validity boolean, severity-categorized issues (Error, Warning, Info), and computed 0–100 Data Quality Score.
-- **Rule Engine**:
-  - `Error`: Empty dataset, >30% missing cells, fully null rows.
-  - `Warning`: Single column dataset, >5% missing cells, constant columns, duplicate rows, >50% missing column rate.
-  - `Info`: High-cardinality ID-like columns, minor missing placeholders.
+| # | Tool | Type | What it does |
+|---|---|---|---|
+| 1 | `profile_data` | **core** | Load CSV, report shape/dtypes/missing/duplicates, suggest a target column |
+| 2 | `clean_data` | **core** | Drop empty columns + exact duplicate rows |
+| 3 | `detect_problem_type` | **core** | Classification / regression / clustering, with the reason |
+| 4 | `select_and_rank_features` | **core** | Drop unusable (ID-like) columns, rank feature importance, build EDA charts, export cleaned CSV |
+| 5 | `train_and_evaluate_models` | **core** | Train every candidate model + a naive baseline, score, pick the best |
+| 6 | `handle_class_imbalance_and_retrain` | **corrective** | Oversample minority class(es), retrain — only invoked when the agent decides imbalance is hurting the result |
+| 7 | `engineer_features_and_retrain` | **corrective** | Drop low-importance features and/or add an interaction feature, retrain — only invoked when the agent decides the model is too weak |
+| 8 | `explain_best_model` | **core** | SHAP (tree/linear models) or permutation importance fallback |
+| 9 | `generate_insights` | **core** | Plain-English summary from the structured results (LLM or template) |
+| 10 | `finish` | **control** | Ends the loop with a reasoned summary + success flag |
 
-### 📊 2. Dataset Profiler (`tools/dataset_profiler.py`)
-- **Input**: `df: pd.DataFrame`
-- **Output**: Enriched profiling dictionary.
-- **Metrics Computed**:
-  - Rows, columns, cell count, total missing percentage.
-  - Memory usage in MB (`df.memory_usage(deep=True)`).
-  - Per-column metadata: Dtype, missing count/pct, unique values count, sample values.
-  - Numeric metrics: Mean, standard deviation, min, max, skewness, IQR outlier counts.
-
-### 🧹 3. Data Filter (`tools/data_filter.py`)
-- **Input**: `df: pd.DataFrame`, `options: dict`
-- **Output**: `(cleaned_df: pd.DataFrame, changelog: list[str])`
-- **Operations**:
-  1. `drop_null_rows`: Removes rows where all values are NaN.
-  2. `drop_duplicates`: Removes duplicate rows.
-  3. `drop_constant_cols`: Removes columns with $\le 1$ unique value.
-  4. `drop_null_cols`: Removes columns where all values are NaN.
-  5. `drop_id_cols`: Drops high-cardinality categorical text columns ($>90\%$ unique).
-  6. `impute_missing`: Fills numeric NaNs with median; categorical NaNs with mode.
-  7. `remove_outliers`: Filters out rows beyond $Q1 - 1.5 \times IQR$ and $Q3 + 1.5 \times IQR$.
-
-### 🚀 4. Model Trainer (`tools/model_trainer.py`)
-- **Input**: `df: pd.DataFrame`, `target: str`
-- **Output**: Dictionary containing task type, top model name, metric name, best score, and benchmark DataFrame.
-- **Task Classifier**:
-  - `Classification`: If `y` is categorical, string, or has $\le 10$ unique values. Uses **F1 Score (Weighted)**.
-  - `Regression`: If `y` is continuous numeric. Uses **R² Score**.
-- **Model Suite**:
-  - Classification: Logistic Regression, Decision Tree Classifier, Random Forest Classifier ($n\_estimators=150$).
-  - Regression: Linear Regression, Decision Tree Regressor, Random Forest Regressor ($n\_estimators=150$).
-
-### 🧠 5. Agent Orchestrator (`agent/agent.py`)
-- **Engine**: Groq API using `qwen/qwen3.8-27b` model.
-- **Key Methods**:
-  - `analyze(profile, validation)`: Generates plain-English executive analysis under 200 words.
-  - `suggest_filters(profile, validation)`: Recommends specific cleaning steps with justifications.
-  - `_call_llm()`: Handles API execution and provides heuristic fallback warnings if API key is missing.
+> **Reasoning & Trace Observability**: Every tool call requires a `reasoning` argument — the model's own stated justification for taking that action right now, given what it has seen. That reasoning, plus each tool's observation, is what's rendered verbatim in the frontend's **Agent Trace** tab, and what's returned by `GET /api/trace/{run_id}`.
 
 ---
 
-## 4. Repository File Structure
+## 4. Error recovery, concretely
 
-```
-AutoDS/
-│
-├── autods_app.py            # 🚀 Unified single-file edition (Run: streamlit run autods_app.py)
-├── generate_dataset.py      # Synthetic benchmark CSV dataset generator script
-├── dummy_dataset.csv        # Pre-generated sample dataset for immediate testing
-├── eda_report.html          # Sample exported HTML report
-├── requirements.txt         # Dependencies (streamlit, pandas, numpy, plotly, scikit-learn, groq, python-dotenv)
-├── README.md                # General project overview & quickstart guide
-├── ARCHITECTURE.md          # Comprehensive architecture & design specification
-├── .env                     # Local environment variables (GROQ_API_KEY)
-├── .env.example             # Template environment configuration
-│
-├── app/
-│   └── main.py              # Modular Streamlit dashboard frontend
-│
-├── agent/
-│   ├── __init__.py
-│   └── agent.py             # Groq LLM Agent Orchestrator (AutoDSAgent)
-│
-├── config/
-│   └── settings.py          # Global path configurations (BASE_DIR, UPLOAD_DIR, REPORT_DIR)
-│
-├── data_store/
-│   ├── reports/             # Generated analytical reports directory
-│   └── uploads/             # File ingestion upload directory
-│
-└── tools/
-    ├── __init__.py
-    ├── data_validator.py    # Health validation & sentinel check engine
-    ├── dataset_profiler.py   # Statistical profiling engine
-    ├── data_filter.py       # Data cleaning & preprocessing pipeline
-    ├── auto_eda.py          # Summary EDA helper
-    └── model_trainer.py     # AutoML training & evaluation pipeline
-```
+Before this rework, an unmodelable dataset (e.g. every column is an ID or free text) raised an uncaught `ValueError` and the whole run died with a generic `500`. Now:
+
+- `select_and_rank_features` raises a `ToolError` instead.
+- The agent sees it as an observation, reflects on it in the trace, and calls `finish(success=false, ...)` with a specific, human-readable explanation.
+- The run completes gracefully and the user sees exactly why, in the same **Agent Trace UI** as a successful run.
 
 ---
 
-## 5. Deployment & Execution Instructions
+## 5. Tech stack
 
-```bash
-# Clone Repository
-git clone https://github.com/NawazJohn/Spidey-Data-Scientist.git
-cd AutoDS
-
-# Create & Activate Virtual Environment
-python -m venv .venv
-.venv\Scripts\activate       # On Windows
-
-# Install Dependencies
-pip install -r requirements.txt
-
-# Run Standalone App
-streamlit run autods_app.py
-```
+- **Backend**: FastAPI + Uvicorn (`app/main.py`)
+- **Agent / Orchestration**: Hand-rolled function-calling loop against the OpenAI API (`app/agent/llm_agent.py`) — chosen over a heavier framework (LangGraph/CrewAI) so the full `GOAL → ... → COMPLETE` loop, tool schemas, and trace format are all visible in ~250 lines instead of framework abstractions, which matters for a judged demo.
+- **ML Engine**: `scikit-learn`, `XGBoost` (optional), `SHAP` (with automatic permutation-importance fallback).
+- **LLM**: Any OpenAI-compatible function-calling API — **Ollama** (local, free, no account), **Groq** (`llama-3.3-70b-versatile`, free) or **Gemini** (free), **OpenAI** (`gpt-4o-mini`, paid) also supported. Provider is auto-selected from whichever is configured (`app/config.py:resolve_llm_provider`); an unreachable/failing provider falls back to the deterministic mode at runtime rather than crashing the run.
+- **Frontend**: Single-page vanilla JS + Plotly (`frontend/index.html`), now including an **Agent Trace** tab.
+- **Storage**: Local filesystem (`storage/`) — no DB in this v1, matching the original project's documented scope.
