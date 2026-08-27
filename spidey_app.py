@@ -980,11 +980,8 @@ else:
         st.error(f"❌ Failed to read file: {e}")
         st.stop()
 
-    @st.cache_resource
-    def get_agent():
-        return AutoDSAgent()
-
-    agent = get_agent()
+    # ── Initialize Agent ──────────────────────────────────────────
+    agent = AutoDSAgent()
 
     # MODULE 01: DATA VALIDATION & HEALTH
     st.markdown("## 📋 Module 01 — Data Validation & Health")
@@ -1115,6 +1112,19 @@ else:
             st.info("At least 2 numeric columns required for correlation matrix.")
 
     with tab4:
+        # Check active key
+        has_key = bool(os.getenv("GROQ_API_KEY") or (st.secrets.get("GROQ_API_KEY", "") if hasattr(st, "secrets") else "") or st.session_state.get("groq_api_key", ""))
+        
+        if not has_key:
+            st.markdown('<div class="ai-box">', unsafe_allow_html=True)
+            st.markdown('<div class="ai-label"><span class="pulse-dot-red"></span> 🔑 Enter Groq API Key to Enable AI</div>', unsafe_allow_html=True)
+            inline_key = st.text_input("Paste your Groq API Key (starts with gsk_):", type="password", placeholder="gsk_...", key="inline_key_tab4")
+            if inline_key:
+                st.session_state["groq_api_key"] = inline_key.strip()
+                os.environ["GROQ_API_KEY"] = inline_key.strip()
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+
         if st.button("⚡ Generate AI Insight Report", key="ai_analyze"):
             with st.spinner("🧠 Groq AI is analyzing your dataset structure..."):
                 light_profile = {k: v for k, v in profile.items() if k != "column_details"}
