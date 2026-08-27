@@ -29,8 +29,16 @@ class AutoDSAgent:
 
     def __init__(self):
         self.history = []
-        
-        # Resolve API Key from env or Streamlit secrets
+        self.client = None
+        self.api_key = None
+        self.model = "qwen/qwen3.8-27b"
+        self._get_client()
+
+    def _get_client(self):
+        """Dynamic client resolver to support runtime Secrets updates."""
+        if self.client is not None:
+            return self.client
+
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key and st is not None:
             try:
@@ -38,26 +46,26 @@ class AutoDSAgent:
             except Exception:
                 pass
 
-        self.api_key = api_key
-        self.client = None
-        self.model = "qwen/qwen3.8-27b"
-
-        if GROQ_AVAILABLE and self.api_key:
+        if GROQ_AVAILABLE and api_key:
             try:
-                self.client = Groq(api_key=self.api_key)
+                self.client = Groq(api_key=str(api_key).strip())
+                self.api_key = str(api_key).strip()
             except Exception:
                 self.client = None
+
+        return self.client
 
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
         """Internal helper to call the Groq LLM with heuristic fallback."""
         if not GROQ_AVAILABLE:
             return "💡 AI intelligence is in offline fallback mode (groq package not installed)."
 
-        if not self.client:
+        client = self._get_client()
+        if not client:
             return "💡 AI intelligence requires a GROQ_API_KEY. Add it to .env or Streamlit Secrets to enable real-time LLM insights."
 
         try:
-            response = self.client.chat.completions.create(
+            response = client.chat.completions.create(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},

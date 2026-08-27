@@ -470,32 +470,39 @@ class AutoDSAgent:
 
     def __init__(self):
         self.history = []
+        self.client = None
+        self.api_key = None
+        self.model = "qwen/qwen3.8-27b"
+        self._get_client()
+
+    def _get_client(self):
+        if self.client is not None:
+            return self.client
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
             try:
                 api_key = st.secrets.get("GROQ_API_KEY")
             except Exception:
                 pass
-
-        self.api_key = api_key
-        self.client = None
-        if GROQ_AVAILABLE and self.api_key:
+        if GROQ_AVAILABLE and api_key:
             try:
-                self.client = Groq(api_key=self.api_key)
+                self.client = Groq(api_key=str(api_key).strip())
+                self.api_key = str(api_key).strip()
             except Exception:
                 self.client = None
-        self.model = "qwen/qwen3.8-27b"
+        return self.client
 
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
         """Internal helper to call the Groq LLM with heuristic fallbacks."""
-        if not self.client:
+        client = self._get_client()
+        if not client:
             return (
                 "⚠️ **Groq API Key Not Configured / Groq Package Unavailable**\n\n"
-                "Please set `GROQ_API_KEY` in your `.env` file to enable live AI insight generation.\n"
+                "Please set `GROQ_API_KEY` in your `.env` file or Streamlit Secrets to enable live AI insight generation.\n"
                 "*(AutoDS rules engine recommendations remain fully functional!)*"
             )
         try:
-            response = self.client.chat.completions.create(
+            response = client.chat.completions.create(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},
