@@ -1,7 +1,20 @@
 import json
 import os
 from dotenv import load_dotenv
-from groq import Groq
+
+# Try importing Streamlit for secrets support if available
+try:
+    import streamlit as st
+except ImportError:
+    st = None
+
+# Try importing Groq gracefully
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    Groq = None
+    GROQ_AVAILABLE = False
 
 # Load environment variables from .env file
 load_dotenv()
@@ -11,16 +24,38 @@ class AutoDSAgent:
     """
     LLM-powered orchestrator for AutoDS.
     Uses Groq (fast LLM inference) to observe, decide, analyze, and act on datasets.
+    Includes robust fallbacks when offline or when keys/dependencies are missing.
     """
 
     def __init__(self):
         self.history = []
-        # Initialize the Groq client using the API key loaded from .env
-        self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-        self.model = "qwen/qwen3.8-27b"
+        
+        # Resolve API Key from env or Streamlit secrets
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key and st is not None:
+            try:
+                api_key = st.secrets.get("GROQ_API_KEY")
+            except Exception:
+                pass
+
+        self.api_key = api_key
+        self.client = None
+        self.model = "llama-3.3-70b-versatile"
+
+        if GROQ_AVAILABLE and self.api_key:
+            try:
+                self.client = Groq(api_key=self.api_key)
+            except Exception:
+                self.client = None
 
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
-        """Internal helper to call the Groq LLM."""
+        """Internal helper to call the Groq LLM with heuristic fallback."""
+        if not GROQ_AVAILABLE:
+            return "💡 AI intelligence is in offline fallback mode (groq package not installed)."
+
+        if not self.client:
+            return "💡 AI intelligence requires a GROQ_API_KEY. Add it to .env or Streamlit Secrets to enable real-time LLM insights."
+
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -32,7 +67,7 @@ class AutoDSAgent:
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
-            return f"Error calling Groq API: {str(e)}"
+            return f"⚠️ Notice from AI Agent: Unable to reach Groq API ({str(e)}). Pipeline continues with deterministic analysis."
 
     def observe(self, profile):
         self.history.append({"step": "observe", "profile": profile})
