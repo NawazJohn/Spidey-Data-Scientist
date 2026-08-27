@@ -470,7 +470,14 @@ class AutoDSAgent:
 
     def __init__(self):
         self.history = []
-        self.api_key = os.getenv("GROQ_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key:
+            try:
+                api_key = st.secrets.get("GROQ_API_KEY")
+            except Exception:
+                pass
+
+        self.api_key = api_key
         self.client = None
         if GROQ_AVAILABLE and self.api_key:
             try:

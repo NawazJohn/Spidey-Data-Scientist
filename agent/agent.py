@@ -23,7 +23,7 @@ load_dotenv()
 class AutoDSAgent:
     """
     LLM-powered orchestrator for AutoDS.
-    Uses Groq (fast LLM inference) to observe, decide, analyze, and act on datasets.
+    Uses Groq (fast LLM inference with Qwen 3.8 / LLaMA) to observe, decide, analyze, and act on datasets.
     Includes robust fallbacks when offline or when keys/dependencies are missing.
     """
 
@@ -40,7 +40,7 @@ class AutoDSAgent:
 
         self.api_key = api_key
         self.client = None
-        self.model = "llama-3.3-70b-versatile"
+        self.model = "qwen/qwen3.8-27b"
 
         if GROQ_AVAILABLE and self.api_key:
             try:
