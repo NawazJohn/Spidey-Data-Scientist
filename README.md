@@ -6,7 +6,7 @@ Spidey DATA SCIENTIST (AutoDS) is an end-to-end, LLM-powered autonomous data sci
 
 ---
 
-## 📌 1. Problem Statement & Mission
+##  1. Problem Statement & Mission
 
 Building tabular Machine Learning pipelines manually requires tedious repetition: data ingestion, missing value and sentinel checks, column type detection, outlier identification, encoding, scaling, model selection, hyperparameter evaluation, and report generation.
 
@@ -14,36 +14,36 @@ Building tabular Machine Learning pipelines manually requires tedious repetition
 $$\text{GOAL} \longrightarrow \text{OBSERVE} \longrightarrow \text{VALIDATE} \longrightarrow \text{PROFILE} \longrightarrow \text{TRANSFORM} \longrightarrow \text{AUTOML} \longrightarrow \text{AI REFLECT}$$
 
 Key design goals:
-* ⚡ **Zero-Code Automation**: Ingest raw datasets and get trained models + reports in seconds.
-* 🧠 **LLM-Driven Reasoning**: Powered by Groq's ultra-fast inference (Qwen 3.8 model) to generate plain-English dataset reports and cleaning strategies.
-* 🛡️ **Robust Error Handling & Heuristic Fallbacks**: Graceful degradation if Groq API keys are not provided; the platform continues seamlessly using rule-based heuristics.
-* 🎨 **Glossy Emerald UI**: State-of-the-art visual design built with custom glassmorphism, responsive Tailwind CSS styling, and reactive Plotly dark-mode charts.
+*  **Zero-Code Automation**: Ingest raw datasets and get trained models + reports in seconds.
+*  **LLM-Driven Reasoning**: Powered by Groq's ultra-fast inference (Qwen 3.8 model) to generate plain-English dataset reports and cleaning strategies.
+*  **Robust Error Handling & Heuristic Fallbacks**: Graceful degradation if Groq API keys are not provided; the platform continues seamlessly using rule-based heuristics.
+*  **Glossy Emerald UI**: State-of-the-art visual design built with custom glassmorphism, responsive Tailwind CSS styling, and reactive Plotly dark-mode charts.
 
 ---
 
-## 🚀 2. Core Capabilities & Pipeline Modules
+##  2. Core Capabilities & Pipeline Modules
 
 AutoDS is structured into 4 sequential Mission Control modules:
 
-### 📋 Module 01 — Data Validation & Health
+###  Module 01 — Data Validation & Health
 * **File Health Audit**: Evaluates rows, columns, memory usage, and empty file conditions.
 * **Sentinel Dummy Detection**: Scans for placeholder values (`?`, `-999`, `null`, `n/a`, `unknown`, empty strings).
 * **Duplicate & High Missing Alert**: Flags full and feature-level duplicates, as well as columns with >50% missing data.
 * **Data Quality Score**: Calculates an overall 0–100 quality score badge (`Badge Good`, `Badge Warning`, `Badge Error`).
 
-### 📊 Module 02 — Exploratory Profiling & AI Intelligence
+###  Module 02 — Exploratory Profiling & AI Intelligence
 * **Column Meta Breakdown**: Data types, missing counts, unique values, sample values, skewness, and IQR outlier counts.
 * **Distribution Visualizations**: Interactive histograms, box plots, and missing value distribution bar charts.
 * **Correlation Heatmaps**: Multi-variate numeric correlation matrix formatted with Plotly dark themes.
-* **⚡ Groq AI Report**: LLM-generated executive summary analyzing data patterns, quality risks, and preprocessing recommendations.
+* ** Groq AI Report**: LLM-generated executive summary analyzing data patterns, quality risks, and preprocessing recommendations.
 
-### 🧹 Module 03 — Data Transformation & Filtering
+###  Module 03 — Data Transformation & Filtering
 * **Interactive Transformations**: Drop duplicate rows, drop fully-null rows/columns, drop constant (zero-variance) columns, drop high-cardinality ID columns, IQR outlier filtering.
 * **Automated Imputation**: Median imputation for numeric features, mode imputation for categorical features.
 * **Audit Trail**: Real-time changelog tracking exact row/column shape changes before and after cleaning.
 * **Export**: Instant single-click download of the processed `cleaned_dataset.csv`.
 
-### 🚀 Module 04 — AutoML Model Engine
+###  Module 04 — AutoML Model Engine
 * **Automatic Task Detection**: Inspects target variable properties to auto-classify as **Classification** (F1 score metric) or **Regression** (R² metric).
 * **Target Visualizations**: Dynamic user-selected target charts (Bar Chart, Pie Chart, Histogram, Box Plot, Line Trend).
 * **Pipeline Preprocessor**: Automated `ColumnTransformer` with `SimpleImputer`, `StandardScaler`, and `OneHotEncoder(handle_unknown='ignore')`.
@@ -101,11 +101,11 @@ Raw CSV/XLSX Upload
 
 ---
 
-## 📂 5. Project Repository Structure
+##  5. Project Repository Structure
 
 ```
 AutoDS/
-├── autods_app.py            # 🚀 Standalone, single-file version of the complete app
+├── autods_app.py            #  Standalone, single-file version of the complete app
 ├── app/
 │   └── main.py              # Modular Streamlit Mission Control interface
 ├── agent/
@@ -127,7 +127,7 @@ AutoDS/
 
 ---
 
-## ⚡ 6. Getting Started
+##  6. Getting Started
 
 ### Step 1: Clone & Setup Virtual Environment
 ```bash
@@ -171,7 +171,7 @@ Open **http://localhost:8501** in your browser.
 
 ---
 
-## 🧪 7. Testing with Sample Data
+##  7. Testing with Sample Data
 
 AutoDS includes a built-in synthetic dataset generator:
 
