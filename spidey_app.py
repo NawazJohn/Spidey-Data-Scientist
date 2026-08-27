@@ -476,20 +476,35 @@ class AutoDSAgent:
         self._get_client()
 
     def _get_client(self):
-        if self.client is not None:
-            return self.client
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
+        api_key = None
+        if st is not None:
             try:
-                api_key = st.secrets.get("GROQ_API_KEY")
+                api_key = st.session_state.get("groq_api_key")
             except Exception:
                 pass
-        if GROQ_AVAILABLE and api_key:
+
+        if not api_key:
+            api_key = os.getenv("GROQ_API_KEY")
+
+        if not api_key and st is not None:
             try:
-                self.client = Groq(api_key=str(api_key).strip())
-                self.api_key = str(api_key).strip()
+                if hasattr(st, "secrets"):
+                    if "GROQ_API_KEY" in st.secrets:
+                        api_key = st.secrets["GROQ_API_KEY"]
+                    elif hasattr(st.secrets, "get"):
+                        api_key = st.secrets.get("GROQ_API_KEY")
             except Exception:
-                self.client = None
+                pass
+
+        if GROQ_AVAILABLE and api_key:
+            clean_key = str(api_key).strip()
+            if clean_key and (self.client is None or self.api_key != clean_key):
+                try:
+                    self.client = Groq(api_key=clean_key)
+                    self.api_key = clean_key
+                except Exception:
+                    self.client = None
+
         return self.client
 
     def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
@@ -497,8 +512,7 @@ class AutoDSAgent:
         client = self._get_client()
         if not client:
             return (
-                "⚠️ **Groq API Key Not Configured / Groq Package Unavailable**\n\n"
-                "Please set `GROQ_API_KEY` in your `.env` file or Streamlit Secrets to enable live AI insight generation.\n"
+                "💡 **Groq API Key Required**: Enter your key in the **Sidebar (🔑 Groq AI)** or add `GROQ_API_KEY` to **Streamlit Secrets**.\n\n"
                 "*(AutoDS rules engine recommendations remain fully functional!)*"
             )
         try:
@@ -512,7 +526,7 @@ class AutoDSAgent:
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
-            return f"Error calling Groq API: {str(e)}"
+            return f"⚠️ Notice from AI Agent: Unable to reach Groq API ({str(e)}). Pipeline continues with deterministic analysis."
 
     def analyze(self, profile: dict, validation: dict) -> str:
         system_prompt = (
@@ -914,6 +928,27 @@ with st.sidebar:
         3. **🧹 Module 03 — Data Transformation**
         4. **🚀 Module 04 — AutoML Model Engine**
         """)
+
+    st.markdown("---")
+    st.markdown("### 🔑 Groq AI Key")
+    saved_key = os.getenv("GROQ_API_KEY", "")
+    if not saved_key and hasattr(st, "secrets"):
+        try:
+            saved_key = st.secrets.get("GROQ_API_KEY", "")
+        except Exception:
+            saved_key = ""
+
+    ui_api_key = st.text_input(
+        "Enter Groq API Key (Optional)",
+        value=st.session_state.get("groq_api_key", saved_key),
+        type="password",
+        placeholder="gsk_...",
+        help="Paste your Groq API Key here to enable live AI dataset intelligence.",
+    )
+    if ui_api_key:
+        st.session_state["groq_api_key"] = ui_api_key.strip()
+        os.environ["GROQ_API_KEY"] = ui_api_key.strip()
+
 
 
 # Main Application Logic

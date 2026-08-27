@@ -2,7 +2,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-# Try importing Streamlit for secrets support if available
+# Try importing Streamlit for secrets & session_state support if available
 try:
     import streamlit as st
 except ImportError:
@@ -24,7 +24,7 @@ class AutoDSAgent:
     """
     LLM-powered orchestrator for AutoDS.
     Uses Groq (fast LLM inference with Qwen 3.8 / LLaMA) to observe, decide, analyze, and act on datasets.
-    Includes robust fallbacks when offline or when keys/dependencies are missing.
+    Supports dynamic resolution from UI sidebar, Streamlit secrets, or .env.
     """
 
     def __init__(self):
@@ -35,23 +35,39 @@ class AutoDSAgent:
         self._get_client()
 
     def _get_client(self):
-        """Dynamic client resolver to support runtime Secrets updates."""
-        if self.client is not None:
-            return self.client
+        """Multi-layer dynamic client resolver (UI Session State -> Env -> Streamlit Secrets)."""
+        api_key = None
 
-        api_key = os.getenv("GROQ_API_KEY")
+        # 1. Check Streamlit session_state (entered directly via UI sidebar)
+        if st is not None:
+            try:
+                api_key = st.session_state.get("groq_api_key")
+            except Exception:
+                pass
+
+        # 2. Check environment variable (.env or exported container env)
+        if not api_key:
+            api_key = os.getenv("GROQ_API_KEY")
+
+        # 3. Check Streamlit Cloud secrets (secrets.toml or Cloud Secrets tab)
         if not api_key and st is not None:
             try:
-                api_key = st.secrets.get("GROQ_API_KEY")
+                if hasattr(st, "secrets"):
+                    if "GROQ_API_KEY" in st.secrets:
+                        api_key = st.secrets["GROQ_API_KEY"]
+                    elif hasattr(st.secrets, "get"):
+                        api_key = st.secrets.get("GROQ_API_KEY")
             except Exception:
                 pass
 
         if GROQ_AVAILABLE and api_key:
-            try:
-                self.client = Groq(api_key=str(api_key).strip())
-                self.api_key = str(api_key).strip()
-            except Exception:
-                self.client = None
+            clean_key = str(api_key).strip()
+            if clean_key and (self.client is None or self.api_key != clean_key):
+                try:
+                    self.client = Groq(api_key=clean_key)
+                    self.api_key = clean_key
+                except Exception:
+                    self.client = None
 
         return self.client
 
@@ -62,7 +78,7 @@ class AutoDSAgent:
 
         client = self._get_client()
         if not client:
-            return "💡 AI intelligence requires a GROQ_API_KEY. Add it to .env or Streamlit Secrets to enable real-time LLM insights."
+            return "💡 **Groq API Key Required**: Enter your key in the **Sidebar (🔑 Groq AI)** or add `GROQ_API_KEY` to **Streamlit Secrets**."
 
         try:
             response = client.chat.completions.create(

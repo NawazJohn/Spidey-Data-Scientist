@@ -388,6 +388,27 @@ with st.sidebar:
         4. **🚀 Module 04 — AutoML Model Engine**
         """)
 
+    st.markdown("---")
+    st.markdown("### 🔑 Groq AI Key")
+    saved_key = os.getenv("GROQ_API_KEY", "")
+    if not saved_key and hasattr(st, "secrets"):
+        try:
+            saved_key = st.secrets.get("GROQ_API_KEY", "")
+        except Exception:
+            saved_key = ""
+
+    ui_api_key = st.text_input(
+        "Enter Groq API Key (Optional)",
+        value=st.session_state.get("groq_api_key", saved_key),
+        type="password",
+        placeholder="gsk_...",
+        help="Paste your Groq API Key here to enable live AI dataset intelligence.",
+    )
+    if ui_api_key:
+        st.session_state["groq_api_key"] = ui_api_key.strip()
+        os.environ["GROQ_API_KEY"] = ui_api_key.strip()
+
+
 
 # ─── Main Content ────────────────────────────────────────────────
 if not uploaded:
