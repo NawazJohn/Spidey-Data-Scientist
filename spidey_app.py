@@ -552,7 +552,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Custom Tailwind & Glassmorphism Emerald Design System
+# Custom Tailwind & Glassmorphism Miles Morales Red & Black Design System
 st.markdown("""
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style>
@@ -563,44 +563,44 @@ st.markdown("""
         to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes pulseEmerald {
-        0% { box-shadow: 0 0 12px rgba(16, 185, 129, 0.25); }
-        50% { box-shadow: 0 0 30px rgba(52, 211, 153, 0.6); }
-        100% { box-shadow: 0 0 12px rgba(16, 185, 129, 0.25); }
+    @keyframes pulseVenomRed {
+        0% { box-shadow: 0 0 12px rgba(255, 23, 68, 0.3); }
+        50% { box-shadow: 0 0 32px rgba(255, 23, 68, 0.7); }
+        100% { box-shadow: 0 0 12px rgba(255, 23, 68, 0.3); }
     }
 
-    @keyframes pulseDotGreen {
+    @keyframes pulseDotRed {
         0% { transform: scale(0.95); opacity: 0.8; }
         50% { transform: scale(1.3); opacity: 1; }
         100% { transform: scale(0.95); opacity: 0.8; }
     }
 
     .stApp {
-        background: radial-gradient(circle at 50% -10%, #064e3b 0%, #022c22 50%, #02140e 95%);
+        background: radial-gradient(circle at 50% -10%, #2A0913 0%, #13070E 40%, #090A0F 95%);
         font-family: 'Inter', sans-serif;
-        color: #fafafa;
+        color: #f5f5f7;
     }
 
     .launchpad-badge {
         display: inline-flex;
         align-items: center;
         gap: 0.6rem;
-        background: rgba(6, 78, 59, 0.6);
-        border: 1px solid rgba(52, 211, 153, 0.4);
+        background: rgba(45, 10, 20, 0.75);
+        border: 1px solid rgba(255, 23, 68, 0.5);
         padding: 0.45rem 1.2rem;
         border-radius: 50px;
         font-size: 0.82rem;
         font-weight: 800;
         letter-spacing: 2px;
-        color: #34d399;
+        color: #FF1744;
         text-transform: uppercase;
-        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        box-shadow: 0 4px 20px rgba(255, 23, 68, 0.25);
         backdrop-filter: blur(12px);
         margin-bottom: 0.8rem;
     }
 
     .main-header {
-        background: linear-gradient(135deg, #a7f3d0 0%, #34d399 45%, #059669 90%);
+        background: linear-gradient(135deg, #FF6B8B 0%, #FF1744 45%, #B70928 90%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 3.3rem;
@@ -612,7 +612,7 @@ st.markdown("""
     }
 
     .sub-header {
-        color: #6ee7b7;
+        color: #FFA4B6;
         font-size: 1.08rem;
         margin-top: -0.2rem;
         margin-bottom: 2.2rem;
@@ -622,34 +622,34 @@ st.markdown("""
     }
 
     .metric-card {
-        background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(2, 44, 34, 0.75) 100%);
+        background: linear-gradient(135deg, rgba(35, 14, 22, 0.65) 0%, rgba(16, 10, 18, 0.85) 100%);
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(52, 211, 153, 0.28);
-        border-top: 3px solid #10b981;
+        border: 1px solid rgba(255, 23, 68, 0.35);
+        border-top: 3px solid #FF1744;
         border-radius: 18px;
         padding: 1.4rem 1.1rem;
         text-align: center;
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65);
         animation: fadeIn 0.5s ease-out;
     }
 
     .metric-card:hover {
         transform: translateY(-4px) scale(1.02);
-        border-color: #34d399;
-        box-shadow: 0 14px 35px rgba(16, 185, 129, 0.3);
+        border-color: #FF5252;
+        box-shadow: 0 14px 35px rgba(255, 23, 68, 0.4);
     }
 
     .metric-value {
         font-size: 2.2rem;
         font-weight: 800;
-        color: #34d399;
+        color: #FF1744;
         letter-spacing: -0.5px;
     }
 
     .metric-label {
         font-size: 0.82rem;
-        color: #a7f3d0;
+        color: #FFA4B6;
         text-transform: uppercase;
         letter-spacing: 1.4px;
         margin-top: 0.4rem;
@@ -670,10 +670,10 @@ st.markdown("""
     }
 
     .badge-good {
-        background: rgba(16, 185, 129, 0.18);
-        color: #34d399;
-        border: 1px solid rgba(52, 211, 153, 0.5);
-        animation: pulseEmerald 3s infinite ease-in-out;
+        background: rgba(255, 23, 68, 0.18);
+        color: #FF5252;
+        border: 1px solid rgba(255, 23, 68, 0.5);
+        animation: pulseVenomRed 3s infinite ease-in-out;
     }
 
     .badge-warning {
@@ -710,35 +710,35 @@ st.markdown("""
     }
 
     .issue-info {
-        background: rgba(16, 185, 129, 0.12);
-        border-left: 4px solid #10b981;
-        color: #a7f3d0;
+        background: rgba(0, 229, 255, 0.12);
+        border-left: 4px solid #00E5FF;
+        color: #E0F7FA;
     }
 
     .changelog-item {
         padding: 0.75rem 1.2rem;
-        background: rgba(16, 185, 129, 0.12);
-        border-left: 4px solid #10b981;
+        background: rgba(255, 23, 68, 0.12);
+        border-left: 4px solid #FF1744;
         border-radius: 10px;
         margin-bottom: 0.5rem;
         font-size: 0.94rem;
-        color: #a7f3d0;
+        color: #FFA4B6;
         animation: fadeIn 0.4s ease-out;
     }
 
     .ai-box {
-        background: linear-gradient(135deg, rgba(6, 78, 59, 0.6) 0%, rgba(2, 44, 34, 0.8) 100%);
-        border: 1px solid rgba(52, 211, 153, 0.4);
+        background: linear-gradient(135deg, rgba(35, 14, 22, 0.7) 0%, rgba(16, 10, 18, 0.9) 100%);
+        border: 1px solid rgba(255, 23, 68, 0.45);
         border-radius: 18px;
         padding: 1.8rem;
         margin: 1.4rem 0;
-        box-shadow: 0 10px 35px rgba(16, 185, 129, 0.12);
+        box-shadow: 0 10px 35px rgba(255, 23, 68, 0.18);
         backdrop-filter: blur(18px);
         animation: fadeIn 0.6s ease-out;
     }
 
     .ai-label {
-        color: #34d399;
+        color: #FF1744;
         font-weight: 800;
         font-size: 0.88rem;
         text-transform: uppercase;
@@ -749,40 +749,41 @@ st.markdown("""
         gap: 0.6rem;
     }
 
-    .pulse-dot-green {
+    .pulse-dot-red {
         width: 10px;
         height: 10px;
-        background-color: #10b981;
+        background-color: #FF1744;
         border-radius: 50%;
         display: inline-block;
-        animation: pulseDotGreen 1.5s infinite;
+        box-shadow: 0 0 10px #FF1744;
+        animation: pulseDotRed 1.5s infinite;
     }
 
     .step-divider {
         border: none;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.4), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 23, 68, 0.45), transparent);
         margin: 2.8rem 0;
     }
 
     [data-testid="stFileUploader"] section button {
-        border-color: #10b981 !important;
+        border-color: #FF1744 !important;
         color: #fafafa !important;
-        background-color: rgba(6, 78, 59, 0.6) !important;
+        background-color: rgba(45, 10, 20, 0.75) !important;
     }
     [data-testid="stFileUploader"] section button * {
         letter-spacing: normal !important;
     }
 
     div[data-testid="stExpander"] {
-        background-color: rgba(6, 78, 59, 0.4);
-        border: 1px solid rgba(52, 211, 153, 0.25);
+        background-color: rgba(26, 15, 22, 0.5);
+        border: 1px solid rgba(255, 23, 68, 0.28);
         border-radius: 14px;
         transition: border-color 0.3s ease;
     }
 
     div[data-testid="stExpander"]:hover {
-        border-color: rgba(52, 211, 153, 0.5);
+        border-color: rgba(255, 23, 68, 0.55);
     }
 
     .stTabs [data-baseweb="tab-list"] {
@@ -793,40 +794,40 @@ st.markdown("""
         border-radius: 10px;
         padding: 8px 16px;
         font-weight: 600;
-        background-color: #042f2e;
-        border: 1px solid rgba(52, 211, 153, 0.2);
+        background-color: #160B12;
+        border: 1px solid rgba(255, 23, 68, 0.2);
     }
 
     .stTabs [aria-selected="true"] {
-        background-color: rgba(16, 185, 129, 0.25) !important;
-        border-color: #10b981 !important;
-        color: #34d399 !important;
+        background-color: rgba(255, 23, 68, 0.25) !important;
+        border-color: #FF1744 !important;
+        color: #FF5252 !important;
     }
 
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #050507 0%, #070d0a 50%, #041f17 100%) !important;
-        border-right: 1px solid rgba(52, 211, 153, 0.35) !important;
-        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.8) !important;
+        background: linear-gradient(180deg, #0A0B10 0%, #120C14 50%, #1D0A13 100%) !important;
+        border-right: 1px solid rgba(255, 23, 68, 0.35) !important;
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.85) !important;
     }
 
     section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h3 {
-        color: #34d399 !important;
+        color: #FF1744 !important;
         font-weight: 800 !important;
         letter-spacing: 0.5px !important;
     }
 
     section[data-testid="stSidebar"] [data-testid="stFileUploader"] {
-        background: rgba(15, 15, 20, 0.75) !important;
-        border: 1px solid rgba(52, 211, 153, 0.25) !important;
+        background: rgba(18, 14, 22, 0.8) !important;
+        border: 1px solid rgba(255, 23, 68, 0.3) !important;
         border-radius: 14px !important;
         padding: 8px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 
-def get_svg_icon(name: str, size: int = 20, color: str = "#34D399") -> str:
+def get_svg_icon(name: str, size: int = 20, color: str = "#FF1744") -> str:
     icons = {
         "rows": f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>',
         "columns": f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>',
@@ -840,7 +841,7 @@ def get_svg_icon(name: str, size: int = 20, color: str = "#34D399") -> str:
     return icons.get(name, "")
 
 
-def render_metric_card(value, label, color="#34D399", icon_name=None):
+def render_metric_card(value, label, color="#FF1744", icon_name=None):
     icon_svg = get_svg_icon(icon_name, 22, color) if icon_name else ""
     html_code = (
         f'<div class="metric-card">'
@@ -855,19 +856,19 @@ def render_metric_card(value, label, color="#34D399", icon_name=None):
 
 
 def render_quality_badge(score):
-    check_icon = get_svg_icon("check", 18, "#34D399") if score >= 80 else ""
+    check_icon = get_svg_icon("check", 18, "#FF1744") if score >= 80 else ""
     if score >= 80:
         cls, text = "badge-good", f"{check_icon} Data Quality Score: {score}/100"
     elif score >= 50:
-        cls, text = "badge-warning", f"<span class='pulse-dot-green' style='background:#FBBF24;'></span> Data Quality Score: {score}/100"
+        cls, text = "badge-warning", f"<span class='pulse-dot-red' style='background:#FBBF24;'></span> Data Quality Score: {score}/100"
     else:
-        cls, text = "badge-error", f"<span class='pulse-dot-green' style='background:#F87171;'></span> Data Quality Score: {score}/100"
+        cls, text = "badge-error", f"<span class='pulse-dot-red' style='background:#F87171;'></span> Data Quality Score: {score}/100"
     st.markdown(f'<span class="quality-badge {cls}">{text}</span>', unsafe_allow_html=True)
 
 
 def render_issue(issue):
     sev = issue["severity"]
-    icon = {"error": "🔴", "warning": "🟡", "info": "🟢"}[sev]
+    icon = {"error": "🔴", "warning": "🟡", "info": "⚡"}[sev]
     st.markdown(
         f'<div class="issue-item issue-{sev}">{icon} <strong>[{issue["category"]}]</strong> {issue["message"]}</div>',
         unsafe_allow_html=True,
@@ -875,9 +876,9 @@ def render_issue(issue):
 
 
 # Header & Launchpad Hero
-st.markdown('<div class="launchpad-badge"><span class="pulse-dot-green"></span> SPIDEY DATA SCIENTIST v2.0 · MISSION CONTROL</div>', unsafe_allow_html=True)
+st.markdown('<div class="launchpad-badge"><span class="pulse-dot-red"></span> SPIDEY DATA SCIENTIST v2.0 · MILES MORALES LAUNCHPAD</div>', unsafe_allow_html=True)
 st.markdown('<h1 class="main-header">🕷️ Spidey DATA SCIENTIST</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-header">Glossy Emerald Intelligence Hub — Profile, Clean & Train AutoML Models</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Venom-Strike Intelligence Hub — Profile, Clean & Train AutoML Models</p>', unsafe_allow_html=True)
 
 
 # Sidebar
@@ -947,15 +948,15 @@ else:
 
     m1, m2, m3, m4, m5 = st.columns(5)
     with m1:
-        render_metric_card(f"{profile['rows']:,}", "Total Rows", "#34D399", "rows")
+        render_metric_card(f"{profile['rows']:,}", "Total Rows", "#FF1744", "rows")
     with m2:
-        render_metric_card(f"{profile['columns']}", "Total Columns", "#6EE7B7", "columns")
+        render_metric_card(f"{profile['columns']}", "Total Columns", "#FFA4B6", "columns")
     with m3:
-        render_metric_card(f"{profile['missing_pct']}%", "Missing Data", "#34D399" if profile['missing_pct'] == 0 else "#FBBF24", "missing")
+        render_metric_card(f"{profile['missing_pct']}%", "Missing Data", "#00E5FF" if profile['missing_pct'] == 0 else "#FBBF24", "missing")
     with m4:
-        render_metric_card(f"{profile['duplicates']}", "Duplicates", "#34D399" if profile['duplicates'] == 0 else "#FBBF24", "duplicates")
+        render_metric_card(f"{profile['duplicates']}", "Duplicates", "#00E5FF" if profile['duplicates'] == 0 else "#FBBF24", "duplicates")
     with m5:
-        render_metric_card(f"{profile['memory_mb']} MB", "Memory Size", "#10B981", "memory")
+        render_metric_card(f"{profile['memory_mb']} MB", "Memory Size", "#FF5252", "memory")
 
     if validation["issues"]:
         with st.expander(f"🔍 Validation Report ({validation['error_count']} Errors, {validation['warning_count']} Warnings)", expanded=True):
@@ -1001,7 +1002,7 @@ else:
             fig = px.histogram(
                 df, x=selected_col, nbins=40,
                 title=f"Histogram — {selected_col}",
-                color_discrete_sequence=["#10B981"],
+                color_discrete_sequence=["#FF1744"],
                 template="plotly_dark",
             )
             fig.update_layout(
@@ -1014,7 +1015,7 @@ else:
             fig_box = px.box(
                 df, y=selected_col,
                 title=f"Box Plot — Outliers in {selected_col}",
-                color_discrete_sequence=["#34D399"],
+                color_discrete_sequence=["#00E5FF"],
                 template="plotly_dark",
             )
             fig_box.update_layout(
@@ -1033,7 +1034,7 @@ else:
                 x=missing_data.index, y=missing_data.values,
                 title="Missing Values Count by Column",
                 labels={"x": "Column", "y": "Missing Count"},
-                color_discrete_sequence=["#059669"],
+                color_discrete_sequence=["#FF5252"],
                 template="plotly_dark",
             )
             fig_missing.update_layout(
@@ -1051,7 +1052,7 @@ else:
                 corr,
                 text_auto=".2f",
                 title="Correlation Heatmap",
-                color_continuous_scale=["#022C22", "#059669", "#10B981", "#6EE7B7"],
+                color_continuous_scale=["#1A0810", "#5C0E20", "#B70928", "#FF1744", "#FFA4B6"],
                 template="plotly_dark",
                 aspect="auto",
             )
@@ -1077,7 +1078,7 @@ else:
                 analysis = agent.analyze(light_profile, validation)
 
             st.markdown('<div class="ai-box">', unsafe_allow_html=True)
-            st.markdown('<div class="ai-label"><span class="pulse-dot-green"></span> AI Dataset Intelligence Report</div>', unsafe_allow_html=True)
+            st.markdown('<div class="ai-label"><span class="pulse-dot-red"></span> AI Dataset Intelligence Report</div>', unsafe_allow_html=True)
             st.markdown(analysis)
             st.markdown('</div>', unsafe_allow_html=True)
         else:
@@ -1109,7 +1110,7 @@ else:
                 suggestions = agent.suggest_filters(light_profile, validation)
 
             st.markdown('<div class="ai-box">', unsafe_allow_html=True)
-            st.markdown('<div class="ai-label"><span class="pulse-dot-green"></span> AI Strategy Recommendations</div>', unsafe_allow_html=True)
+            st.markdown('<div class="ai-label"><span class="pulse-dot-red"></span> AI Strategy Recommendations</div>', unsafe_allow_html=True)
             st.markdown(suggestions)
             st.markdown('</div>', unsafe_allow_html=True)
 
@@ -1138,7 +1139,7 @@ else:
             with ba1:
                 render_metric_card(f"{len(df):,} × {len(df.columns)}", "Original Dataset", "#A1A1AA")
             with ba2:
-                render_metric_card(f"{len(cleaned_df):,} × {len(cleaned_df.columns)}", "Cleaned Dataset", "#34D399")
+                render_metric_card(f"{len(cleaned_df):,} × {len(cleaned_df.columns)}", "Cleaned Dataset", "#FF1744")
 
             st.markdown("")
 
@@ -1179,13 +1180,13 @@ else:
 
         tc1, tc2, tc3, tc4 = st.columns(4)
         with tc1:
-            render_metric_card(str(ml_df[target].dtype), "Data Type", "#34D399")
+            render_metric_card(str(ml_df[target].dtype), "Data Type", "#00E5FF")
         with tc2:
-            render_metric_card(f"{ml_df[target].nunique():,}", "Unique Values", "#6EE7B7")
+            render_metric_card(f"{ml_df[target].nunique():,}", "Unique Values", "#FFA4B6")
         with tc3:
-            render_metric_card(task_type, "Detected Task", "#34D399" if task_type == "Classification" else "#60A5FA")
+            render_metric_card(task_type, "Detected Task", "#FF1744" if task_type == "Classification" else "#00E5FF")
         with tc4:
-            render_metric_card(f"{ml_df[target].isna().sum()}", "Missing Target Rows", "#F87171" if ml_df[target].isna().sum() > 0 else "#34D399")
+            render_metric_card(f"{ml_df[target].isna().sum()}", "Missing Target Rows", "#F87171" if ml_df[target].isna().sum() > 0 else "#00E5FF")
 
         st.markdown("")
         st.markdown("### 📊 Target Variable Visualization")
@@ -1205,7 +1206,7 @@ else:
                 x=val_counts.index.astype(str), y=val_counts.values,
                 title=f"Bar Chart — Value Counts of '{target}'",
                 labels={"x": target, "y": "Count"},
-                color_discrete_sequence=["#10B981"],
+                color_discrete_sequence=["#FF1744"],
                 template="plotly_dark",
             )
         elif "Pie" in chart_type:
@@ -1214,28 +1215,28 @@ else:
                 values=val_counts.values,
                 names=val_counts.index.astype(str),
                 title=f"Pie Chart — Proportional Share of '{target}'",
-                color_discrete_sequence=["#10B981", "#34D399", "#059669", "#047857", "#064E3B"],
+                color_discrete_sequence=["#FF1744", "#FF5252", "#FF7961", "#B70928", "#FFD600"],
                 template="plotly_dark",
             )
         elif "Histogram" in chart_type:
             fig_target = px.histogram(
                 ml_df, x=target, nbins=40,
                 title=f"Histogram Distribution — '{target}'",
-                color_discrete_sequence=["#10B981"],
+                color_discrete_sequence=["#FF1744"],
                 template="plotly_dark",
             )
         elif "Box" in chart_type:
             fig_target = px.box(
                 ml_df, y=target,
                 title=f"Box Plot Spread — '{target}'",
-                color_discrete_sequence=["#34D399"],
+                color_discrete_sequence=["#00E5FF"],
                 template="plotly_dark",
             )
         else:
             fig_target = px.line(
                 ml_df.reset_index(), y=target,
                 title=f"Line Trend Across Records — '{target}'",
-                color_discrete_sequence=["#10B981"],
+                color_discrete_sequence=["#FF1744"],
                 template="plotly_dark",
             )
 
@@ -1259,9 +1260,9 @@ else:
 
                 r1, r2 = st.columns(2)
                 with r1:
-                    render_metric_card(result["best_model"], "Top Performing Model", "#34D399", "rocket")
+                    render_metric_card(result["best_model"], "Top Performing Model", "#FF1744", "rocket")
                 with r2:
-                    render_metric_card(f"{result['best_score']:.4f}", f"Score ({result['metric']})", "#6EE7B7", "sparkles")
+                    render_metric_card(f"{result['best_score']:.4f}", f"Score ({result['metric']})", "#FFA4B6", "sparkles")
 
                 st.markdown("")
                 st.markdown("### 📊 Model Benchmark Leaderboard")
@@ -1271,8 +1272,8 @@ else:
 
     st.markdown("---")
     st.markdown(
-        '<p style="text-align:center; color:#6EE7B7; font-size:0.85rem; opacity:0.8;">'
-        '🚀 AutoDS Launchpad · Powered by Groq AI (Qwen 3.8) · Glossy Emerald Theme'
+        '<p style="text-align:center; color:#FFA4B6; font-size:0.85rem; opacity:0.8;">'
+        '🕷️ Spidey DATA SCIENTIST · Miles Morales Venom-Strike Edition · Powered by Groq AI'
         '</p>',
         unsafe_allow_html=True,
     )
