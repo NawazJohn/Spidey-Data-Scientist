@@ -10,24 +10,24 @@ This document is the architecture-diagram deliverable: system components, the ag
 
 ```mermaid
 flowchart LR
-    User["User"] -->|upload CSV| Frontend["Frontend\n(frontend/index.html)"]
-    Frontend -->|REST API\n/api/results, /api/trace| Backend["FastAPI Backend\n(app/main.py)"]
-    Backend -->|run_pipeline_task| Orchestrator["Agent Orchestrator\n(app/agent/orchestrator.py)"]
+    User["User"] -->|upload CSV| Frontend["Frontend<br/>(frontend/index.html)"]
+    Frontend -->|REST API<br/>/api/results, /api/trace| Backend["FastAPI Backend<br/>(app/main.py)"]
+    Backend -->|run_pipeline_task| Orchestrator["Agent Orchestrator<br/>(app/agent/orchestrator.py)"]
 
-    Orchestrator -->|LLM call (auto at runtime / fallback on fail)| LLMAgent["LLM Agent Loop\n(app/agent/llm_agent.py)"]
-    Orchestrator -.->|no key / offline demo mode| FallbackAgent["Deterministic Fallback\n(app/agent/fallback_agent.py)"]
+    Orchestrator -->|LLM call - auto at runtime or fallback| LLMAgent["LLM Agent Loop<br/>(app/agent/llm_agent.py)"]
+    Orchestrator -.->|no key or offline demo mode| FallbackAgent["Deterministic Fallback<br/>(app/agent/fallback_agent.py)"]
 
-    LLMAgent -->|function-calling\nOpenAI-compatible| LLMProvider[("Ollama (local) / Groq /\nGemini / OpenAI\nwhichever is configured")]
+    LLMAgent -->|function calling<br/>OpenAI compatible| LLMProvider[("Ollama (local) / Groq /<br/>Gemini / OpenAI<br/>whichever is configured")]
 
-    LLMAgent -->|calls tools| ToolLayer["Tool Layer\n(app/agent/tools.py)"]
+    LLMAgent -->|calls tools| ToolLayer["Tool Layer<br/>(app/agent/tools.py)"]
     FallbackAgent -->|calls fixed order| ToolLayer
 
-    ToolLayer -->|executes modules| PipelineModules["Pipeline Engine Modules\n(profiler, cleaner, trainer,\nevaluator, explainer)"]
+    ToolLayer -->|executes modules| PipelineModules["Pipeline Engine Modules<br/>(profiler, cleaner, trainer,<br/>evaluator, explainer)"]
 
-    ToolLayer -->|saves results| Storage[("Storage (storage/)\nresults.json, metrics, plots,\npreprocessed CSV")]
+    ToolLayer -->|saves results| Storage[("Storage (storage/)<br/>results.json, metrics, plots,<br/>preprocessed CSV")]
 
     Backend -.->|reads| Storage
-    Backend -.->|streams| TraceUI["Agent Trace UI\nevery\nGOAL / PLAN / ACT / OBS / REFLECT / CORRECT\nstep"]
+    Backend -.->|streams| TraceUI["Agent Trace UI<br/>every<br/>GOAL / PLAN / ACT / OBS / REFLECT / CORRECT<br/>step"]
     TraceUI -.-> Frontend
 ```
 
@@ -37,23 +37,23 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    GOAL["GOAL\nGiven an unseen CSV: profile, clean, detect problem type,\nselect/rank features, train & compare models vs. a baseline,\nself-correct if weak, explain the best model, summarize"] --> PLAN
+    GOAL["GOAL<br/>Given an unseen CSV: profile, clean, detect problem type,<br/>select/rank features, train and compare models vs baseline,<br/>self-correct if weak, explain best model, summarize"] --> PLAN
 
-    PLAN["PLAN\nLLM decides the next tool call given the system prompt's\nrecommended order + everything observed so far"] --> ACT
+    PLAN["PLAN<br/>LLM decides the next tool call given the system prompt's<br/>recommended order and everything observed so far"] --> ACT
 
-    ACT["USE TOOLS / EXECUTE\nOne function-call per turn, chosen from the 10-tool\nregistry (see section 3)"] --> OBS
+    ACT["USE TOOLS / EXECUTE<br/>One function-call per turn, chosen from the 10-tool<br/>registry (see section 3)"] --> OBS
 
-    OBS["OBSERVE\nTool returns a structured, natural-language result\n(or an ERROR:... string on failure) fed back to the model"] --> REFLECT
+    OBS["OBSERVE<br/>Tool returns a structured, natural-language result<br/>(or an ERROR string on failure) fed back to the model"] --> REFLECT
 
-    REFLECT{"REFLECT\nIs the result good?\n(clearly beats baseline? no error?\nimbalance flagged?)"}
+    REFLECT{"REFLECT<br/>Is the result good?<br/>(clearly beats baseline? no error?<br/>imbalance flagged?)"}
 
-    REFLECT -->|weak / imbalanced / error, budget left| CORRECT
-    REFLECT -->|good, or no fix applies| NEXT{"More steps\nneeded?"}
+    REFLECT -->|weak or imbalanced or error, budget left| CORRECT
+    REFLECT -->|good, or no fix applies| NEXT{"More steps<br/>needed?"}
 
-    CORRECT["CORRECT\nhandle_class_imbalance_and_retrain\nand/or\nengineer_features_and_retrain\n(max 2 corrective actions per run)"] --> ACT
+    CORRECT["CORRECT<br/>handle_class_imbalance_and_retrain<br/>and/or<br/>engineer_features_and_retrain<br/>(max 2 corrective actions per run)"] --> ACT
 
     NEXT -->|yes| PLAN
-    NEXT -->|no| COMPLETE["COMPLETE\nfinish(reasoning, summary, success)"]
+    NEXT -->|no| COMPLETE["COMPLETE<br/>finish(reasoning, summary, success)"]
 ```
 
 ---
